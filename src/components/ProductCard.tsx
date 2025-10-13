@@ -14,7 +14,7 @@ interface ProductCardProps {
   stock: number;
 }
 
-export default function ProductCard({ _id, title, image, price, stock }: ProductCardProps) {
+export default function ProductCard({ title, image, price, stock }: ProductCardProps) {
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <CardMedia

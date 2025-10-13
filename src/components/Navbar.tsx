@@ -11,10 +11,23 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
+import Badge from '@mui/material/Badge';
+import type { BadgeProps } from '@mui/material/Badge';
+import { styled } from '@mui/material/styles';
 import AdbIcon from '@mui/icons-material/Adb';
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useAuth } from '../context/Auth/AuthContext';
+
+const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    right: -3,
+    top: 13,
+    border: `2px solid ${(theme.vars ?? theme).palette.background.paper}`,
+    padding: '0 4px',
+  },
+}));
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -50,6 +63,10 @@ function Navbar() {
     }
   };
 
+  const handleCart = () => {
+    navigate('/cart');
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -74,7 +91,16 @@ function Navbar() {
             </Box>
 
 
-            <Box sx={{ flexGrow: 0 }}>
+            <Box sx={{ flexGrow: 0, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+              {/* Shopping Cart Badge - Always Visible */}
+              <Tooltip title="Shopping Cart">
+                <IconButton aria-label="cart" color="inherit" onClick={handleCart}>
+                  <StyledBadge badgeContent={4} color="secondary">
+                    <ShoppingCartIcon />
+                  </StyledBadge>
+                </IconButton>
+              </Tooltip>
+
               {token && username ? (
                 // Authenticated User Menu
                 <>
