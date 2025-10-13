@@ -3,12 +3,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import Navbar from './components/Navbar';
 import RegisterPage from './pages/RegisterPage';
+import AuthProvider from './context/Auth/AuthProvider';
 
 // You'll need to create this component or import it
 const Home = () => <div>Home Page</div>;
 
 function App() {
   return (
+    <AuthProvider>
     <BrowserRouter>
     <Navbar/>
       <Routes>
@@ -18,6 +20,7 @@ function App() {
       </Routes>
       
     </BrowserRouter>
+    </AuthProvider>
   )
 }
 

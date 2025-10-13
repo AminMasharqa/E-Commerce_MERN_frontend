@@ -20,6 +20,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { BASE_URL } from '../constants/baseUrl';
+import { useAuth } from '../context/Auth/AuthContext';
 
 const RegisterPage = () => {
   const firstNameRef = useRef<HTMLInputElement>(null);
@@ -32,19 +33,23 @@ const RegisterPage = () => {
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const {login} = useAuth();
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess(false);
     setLoading(true);
 
+    // Get values from refs (move outside try block)
+    const firstName = firstNameRef.current?.value.trim() || '';
+    const lastName = lastNameRef.current?.value.trim() || '';
+    const email = emailRef.current?.value.trim().toLowerCase() || '';
+    const password = passwordRef.current?.value || '';
+    const confirmPassword = confirmPasswordRef.current?.value || '';
+
     try {
-      // Get values from refs
-      const firstName = firstNameRef.current?.value.trim() || '';
-      const lastName = lastNameRef.current?.value.trim() || '';
-      const email = emailRef.current?.value.trim().toLowerCase() || '';
-      const password = passwordRef.current?.value || '';
-      const confirmPassword = confirmPasswordRef.current?.value || '';
 
       // Client-side validation
       if (!firstName || !lastName || !email || !password) {
@@ -82,26 +87,32 @@ const RegisterPage = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-      console.log('Server response:', data);
+      const token = await response.json();
+      if(!token){
+        setError('Server error. Please try again later.');
+        setLoading(false);
+        return;
+      }
+      console.log('Server response:', token);
+
 
       // Handle response
       if (!response.ok) {
         // Handle specific error messages
         if (response.status === 400) {
-          if (typeof data.data === 'string' && data.data.toLowerCase().includes('already exists')) {
+          if (typeof token.token === 'string' && token.data.toLowerCase().includes('already exists')) {
             setError('This email is already registered. Please use a different email or try logging in.');
-          } else if (data.message) {
-            setError(data.message);
-          } else if (data.data) {
-            setError(data.data);
+          } else if (token.message) {
+            setError(token.message);
+          } else if (token.data) {
+            setError(token.data);
           } else {
             setError('Invalid registration data. Please check your information.');
           }
         } else if (response.status === 500) {
           setError('Server error. Please try again later.');
         } else {
-          setError(data.message || data.data || 'Registration failed. Please try again.');
+          setError(token.message || token.data || 'Registration failed. Please try again.');
         }
         setLoading(false);
         return;
@@ -111,10 +122,13 @@ const RegisterPage = () => {
       setSuccess(true);
       setLoading(false);
       
-      // Store token if needed (assuming data.data contains JWT)
-      if (data.data) {
-        localStorage.setItem('token', data.data);
+      // Store token if needed (assuming token.token contains JWT)
+      if (token.data) {
+        localStorage.setItem('token', token.data);
         console.log('JWT token stored');
+        
+        // Log in the user with the received token
+        login(email, token.data);
       }
 
       // Clear form
