@@ -18,6 +18,10 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     const logout = () => {
         setUsername(null)
         setToken(null)
+        localStorage.removeItem('token')
+        localStorage.removeItem('username')
+        localStorage.removeItem('rememberMe')
+        localStorage.removeItem('rememberedEmail')
     }
 
     return <AuthContext.Provider value={{ username, token, login, logout }}>{children}</AuthContext.Provider>

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,28 +10,45 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
 import AdbIcon from '@mui/icons-material/Adb';
+import LoginIcon from '@mui/icons-material/Login';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { useAuth } from '../context/Auth/AuthContext';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
-  const {username,token} = useAuth();
+  const { username, token, logout } = useAuth();
+  const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
- 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
-
-
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
-  console.log("from navbar",username,token);
+  const handleMenuItemClick = (setting: string) => {
+    handleCloseUserMenu();
+    
+    if (setting === 'Logout') {
+      logout();
+      navigate('/');
+    } else if (setting === 'Profile') {
+      // Navigate to profile page when implemented
+      console.log('Profile clicked');
+    } else if (setting === 'Account') {
+      // Navigate to account settings when implemented  
+      console.log('Account clicked');
+    } else if (setting === 'Dashboard') {
+      // Navigate to dashboard when implemented
+      console.log('Dashboard clicked');
+    }
+  };
 
   return (
     <AppBar position="static">
@@ -57,33 +75,68 @@ function Navbar() {
 
 
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
+              {token && username ? (
+                // Authenticated User Menu
+                <>
+                  <Tooltip title="Open settings">
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar sx={{ bgcolor: 'secondary.main' }}>
+                        {username.charAt(0).toUpperCase()}
+                      </Avatar>
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: '45px' }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    <MenuItem disabled>
+                      <Typography sx={{ fontWeight: 'bold' }}>
+                        Welcome, {username}
+                      </Typography>
+                    </MenuItem>
+                    {settings.map((setting) => (
+                      <MenuItem key={setting} onClick={() => handleMenuItemClick(setting)}>
+                        <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </>
+              ) : (
+                // Guest User Buttons
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Button
+                    component={Link}
+                    to="/login"
+                    color="inherit"
+                    startIcon={<LoginIcon />}
+                    sx={{ textTransform: 'none' }}
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/register"
+                    variant="outlined"
+                    color="inherit"
+                    startIcon={<PersonAddIcon />}
+                    sx={{ textTransform: 'none' }}
+                  >
+                    Sign Up
+                  </Button>
+                </Box>
+              )}
             </Box>
           </Box>
         </Toolbar>
