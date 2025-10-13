@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { useCart } from '../context/Cart/CartContext';
 
 interface ProductCardProps {
   _id: string;
@@ -14,7 +15,8 @@ interface ProductCardProps {
   stock: number;
 }
 
-export default function ProductCard({ title, image, price, stock }: ProductCardProps) {
+export default function ProductCard({ _id, title, image, price, stock }: ProductCardProps) {
+  const { addItemToCart } = useCart();
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <CardMedia
@@ -38,6 +40,8 @@ export default function ProductCard({ title, image, price, stock }: ProductCardP
           variant="contained" 
           fullWidth 
           disabled={stock === 0}
+          onClick={() => addItemToCart({ _id, title, image, price, stock })}
+
         >
           {stock > 0 ? 'Add to Cart' : 'Out of Stock'}
         </Button>
