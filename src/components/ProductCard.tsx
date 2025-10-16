@@ -40,7 +40,7 @@ export default function ProductCard({ _id, title, image, price, stock }: Product
           variant="contained" 
           fullWidth 
           disabled={stock === 0}
-          onClick={() => addItemToCart({ _id, title, image, price, stock })}
+          onClick={() => addItemToCart(_id)}
 
         >
           {stock > 0 ? 'Add to Cart' : 'Out of Stock'}
