@@ -19,6 +19,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useAuth } from '../context/Auth/AuthContext';
+import { useCart } from '../context/Cart/CartContext';
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -33,9 +34,10 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
   const { username, token, logout } = useAuth();
+  const { cartItems } = useCart();
   const navigate = useNavigate();
 
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState< null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -72,6 +74,7 @@ function Navbar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" ,alignItems:"center" }}>
+           <Button component={Link} to="/" color="inherit" >
             <Box sx={{ display: "flex", flexDirection: "row" ,alignItems:"center"}} >
               <AdbIcon sx={{ display: 'flex', mr: 1 }} />
               <Typography
@@ -89,13 +92,14 @@ function Navbar() {
               </Typography>
 
             </Box>
+            </Button>
 
 
             <Box sx={{ flexGrow: 0, display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }}>
               {/* Shopping Cart Badge - Always Visible */}
               <Tooltip title="Shopping Cart">
                 <IconButton aria-label="cart" color="inherit" onClick={handleCart}>
-                  <StyledBadge badgeContent={4} color="secondary">
+                  <StyledBadge badgeContent={cartItems.length} color="secondary">
                     <ShoppingCartIcon />
                   </StyledBadge>
                 </IconButton>

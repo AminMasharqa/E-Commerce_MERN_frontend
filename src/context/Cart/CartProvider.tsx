@@ -4,7 +4,6 @@ import type { FC, PropsWithChildren } from 'react'
 import { useState, useEffect } from 'react'
 import { CartContext } from './CartContext'
 import type { CartItem } from '../../types/cartItem';
-import type { Product } from '../../types/Product';
 import { BASE_URL } from '../../constants/baseUrl';
 import { useAuth } from '../Auth/AuthContext';
 
@@ -62,7 +61,8 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             setError('Network error occurred');
         }
     }
-    const removeFromCart = async (product: Product) => {
+
+    const updateItemQuantity = async (productId: string, quantity: number) => {
         try {
             setError(''); // Clear previous errors
             
@@ -71,7 +71,61 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
                 return;
             }
 
-            const response = await fetch(`${BASE_URL}/cart/items/${product._id}`, {
+            // Validate quantity
+            if (!Number.isInteger(quantity) || quantity <= 0) {
+                setError('Quantity must be a positive integer');
+                return;
+            }
+
+            const response = await fetch(`${BASE_URL}/cart/items`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ productId, quantity })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                setError(errorData.message || 'Failed to update item quantity');
+                return;
+            }
+            
+            const cart = await response.json();
+            if (!cart) {
+                setError('Failed to parse cart response');
+                return;
+            }
+            
+            // Map the updated cart items from the backend response
+            const cartItemsMapped = cart.items.map((item: any) => ({
+                productId: item.productId._id,
+                title: item.productId.title,
+                image: item.productId.image,
+                quantity: item.quantity,
+                unitPrice: item.unitPrice,
+            }));
+            
+            setCartItems(cartItemsMapped); 
+            setTotalAmount(cart.totalAmount);
+
+        } catch (error) {
+            console.error('Error updating item quantity:', error);
+            setError('Network error occurred');
+        }
+    }
+
+    const removeFromCart = async (productId: string) => {
+        try {
+            setError(''); // Clear previous errors
+            
+            if (!token) {
+                setError('Authentication required');
+                return;
+            }
+
+            const response = await fetch(`${BASE_URL}/cart/items/${productId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -171,7 +225,8 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             value={{ 
                 cartItems, 
                 totalAmount, 
-                addItemToCart, 
+                addItemToCart,
+                updateItemQuantity, 
                 removeFromCart, 
                 clearCart,
                 error 

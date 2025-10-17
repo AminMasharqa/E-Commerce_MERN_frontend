@@ -1,12 +1,12 @@
 import {createContext, useContext} from "react"
 import type { CartItem } from "../../types/cartItem";
-import type { Product } from "../../types/Product";
 
 interface CartContextType {
     cartItems: CartItem[];
     totalAmount: number;
     addItemToCart: (productId: string) => Promise<void>;
-    removeFromCart: (product: Product) => Promise<void>;
+    updateItemQuantity: (productId: string, quantity: number) => Promise<void>;
+    removeFromCart: (productId: string) => Promise<void>;
     clearCart: () => Promise<void>;
     error: string;
 }
@@ -15,6 +15,7 @@ const CartContext = createContext<CartContextType>({
     cartItems:[],
     totalAmount: 0,
     addItemToCart: async () => {},
+    updateItemQuantity: async () => {},
     removeFromCart: async () => {},
     clearCart: async () => {},
     error: '',
