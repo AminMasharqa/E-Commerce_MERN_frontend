@@ -27,6 +27,9 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
     top: 13,
     border: `2px solid ${(theme.vars ?? theme).palette.background.paper}`,
     padding: '0 4px',
+    backgroundColor: '#111827',
+    color: '#FFFFFF',
+    fontWeight: 600,
   },
 }));
 
@@ -70,7 +73,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ bgcolor: '#111827', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" ,alignItems:"center" }}>
@@ -80,7 +83,7 @@ function Navbar() {
               <Typography
                 variant="h6"
                 noWrap
-                component="a"
+                component="div"
                 sx={{
                   mr: 2,
                   display: { xs: 'none', md: 'flex' },
@@ -99,8 +102,8 @@ function Navbar() {
               {/* Shopping Cart Badge - Always Visible */}
               <Tooltip title="Shopping Cart">
                 <IconButton aria-label="cart" color="inherit" onClick={handleCart}>
-                  <StyledBadge badgeContent={cartItems.length} color="secondary">
-                    <ShoppingCartIcon />
+                  <StyledBadge badgeContent={cartItems.length}>
+                    <ShoppingCartIcon sx={{ color: '#FFFFFF' }} />
                   </StyledBadge>
                 </IconButton>
               </Tooltip>
@@ -110,7 +113,7 @@ function Navbar() {
                 <>
                   <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                      <Avatar sx={{ bgcolor: 'secondary.main' }}>
+                      <Avatar sx={{ bgcolor: '#000000', color: '#FFFFFF', fontWeight: 600 }}>
                         {username.charAt(0).toUpperCase()}
                       </Avatar>
                     </IconButton>
@@ -151,7 +154,13 @@ function Navbar() {
                     to="/login"
                     color="inherit"
                     startIcon={<LoginIcon />}
-                    sx={{ textTransform: 'none' }}
+                    sx={{ 
+                      textTransform: 'none',
+                      color: '#FFFFFF',
+                      '&:hover': {
+                        bgcolor: 'rgba(255, 255, 255, 0.1)',
+                      }
+                    }}
                   >
                     Login
                   </Button>
@@ -159,9 +168,16 @@ function Navbar() {
                     component={Link}
                     to="/register"
                     variant="outlined"
-                    color="inherit"
                     startIcon={<PersonAddIcon />}
-                    sx={{ textTransform: 'none' }}
+                    sx={{ 
+                      textTransform: 'none',
+                      color: '#FFFFFF',
+                      borderColor: '#FFFFFF',
+                      '&:hover': {
+                        borderColor: '#FFFFFF',
+                        bgcolor: 'rgba(255, 255, 255, 0.1)',
+                      }
+                    }}
                   >
                     Sign Up
                   </Button>

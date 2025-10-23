@@ -61,10 +61,22 @@ const HomePage = () => {
   }
 
   return (
-    <Container sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h3" component="h1" gutterBottom textAlign="center" sx={{ mb: 4 }}>
-        Our Products
-      </Typography>
+    <Box sx={{ bgcolor: '#FAFAFA', minHeight: '100vh', py: 6 }}>
+      <Container sx={{ mt: 2, mb: 4 }}>
+        <Typography 
+          variant="h3" 
+          component="h1" 
+          textAlign="center" 
+          sx={{ 
+            mb: 6,
+            fontSize: '36px',
+            fontWeight: 700,
+            color: '#111827',
+            letterSpacing: '-0.03em',
+          }}
+        >
+          Our Products
+        </Typography>
       
       {products.length === 0 ? (
         <Typography variant="h6" textAlign="center" color="text.secondary">
@@ -83,7 +95,8 @@ const HomePage = () => {
           ))}
         </Grid>
       )}
-    </Container>
+      </Container>
+    </Box>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, IconButton, Typography } from "@mui/material";
+import { Box, Card, IconButton, Typography } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState, memo } from "react";
 import type { CartItem } from "../../types/cartItem";

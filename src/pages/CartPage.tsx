@@ -27,11 +27,6 @@ const CartPage = () => {
         await updateItemQuantity(productId, newQuantity);
     };
 
-    const handleCheckout = () => {
-        // TODO: Implement checkout flow
-        console.log('Proceed to checkout');
-    };
-
     // Empty cart state
     if (cartItems.length === 0) {
         return (
@@ -222,7 +217,6 @@ const CartPage = () => {
                     <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 35%' } }}>
                         <OrderSummary
                             items={cartItems}
-                            onCheckout={handleCheckout}
                             onClearCart={clearCart}
                         />
                     </Box>

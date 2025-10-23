@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import Navbar from './components/Navbar';
@@ -6,6 +5,8 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import AuthProvider from './context/Auth/AuthProvider';
 import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import OrderSuccessPage from './pages/OrderSuccessPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import CartProvider from './context/Cart/CartProvider';
 
@@ -21,8 +22,9 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/cart" element={<CartPage />} />
-            </Route>
-
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/order-success" element={<OrderSuccessPage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
       </CartProvider>

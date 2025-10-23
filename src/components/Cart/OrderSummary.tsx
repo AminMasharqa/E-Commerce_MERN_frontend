@@ -1,6 +1,7 @@
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import LockIcon from '@mui/icons-material/Lock';
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import type { CartItem } from "../../types/cartItem";
 import { 
     calculateSubtotal, 
@@ -11,7 +12,7 @@ import {
 
 interface OrderSummaryProps {
     items: CartItem[];
-    onCheckout: () => void;
+    onCheckout?: () => void;
     onClearCart: () => void;
     isProcessing?: boolean;
 }
@@ -22,10 +23,19 @@ const OrderSummary = ({
     onClearCart,
     isProcessing = false 
 }: OrderSummaryProps) => {
+    const navigate = useNavigate();
     const subtotal = useMemo(() => calculateSubtotal(items), [items]);
     const shipping = useMemo(() => calculateShipping(subtotal), [subtotal]);
     const tax = useMemo(() => calculateTax(subtotal), [subtotal]);
     const total = subtotal + shipping + tax;
+
+    const handleCheckoutClick = () => {
+        if (onCheckout) {
+            onCheckout();
+        } else {
+            navigate('/checkout');
+        }
+    };
 
     return (
         <Paper
@@ -163,7 +173,7 @@ const OrderSummary = ({
 
             {/* Checkout Button */}
             <Button
-                onClick={onCheckout}
+                onClick={handleCheckoutClick}
                 disabled={isProcessing || items.length === 0}
                 fullWidth
                 sx={{
