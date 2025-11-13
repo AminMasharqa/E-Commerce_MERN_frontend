@@ -60,10 +60,8 @@ function Navbar() {
       navigate('/my-orders');
     } else if (setting === 'Profile') {
       // Navigate to profile page when implemented
-      console.log('Profile clicked');
     } else if (setting === 'Account') {
-      // Navigate to account settings when implemented  
-      console.log('Account clicked');
+      // Navigate to account settings when implemented
     }
   };
 

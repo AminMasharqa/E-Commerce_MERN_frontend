@@ -23,7 +23,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
                     return extractedUserId
                 }
             } catch (error) {
-                console.error('Error decoding existing token:', error)
+                // Error decoding existing token
             }
         }
         return null
@@ -45,7 +45,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
                 localStorage.setItem('userId', extractedUserId)
             }
         } catch (error) {
-            console.error('Error decoding token:', error)
+            // Error decoding token
         }
     }
     const logout = () => {

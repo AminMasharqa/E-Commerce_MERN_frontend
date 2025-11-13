@@ -32,7 +32,6 @@ const HomePage = () => {
         const data = await response.json();
         setProducts(data);
       } catch (error: any) {
-        console.error('Error fetching products:', error);
         setError(error.message);
       } finally {
         setLoading(false);

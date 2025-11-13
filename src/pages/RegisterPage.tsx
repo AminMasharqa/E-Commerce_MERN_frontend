@@ -78,8 +78,6 @@ const RegisterPage = () => {
         password,
       };
 
-      console.log('Submitting registration:', { ...formData, password: '***' });
-
       // Make API request
       const response = await fetch(`${BASE_URL}/user/register`, {
         method: 'POST',
@@ -93,8 +91,6 @@ const RegisterPage = () => {
         setLoading(false);
         return;
       }
-      console.log('Server response:', token);
-
 
       // Handle response
       if (!response.ok) {
@@ -125,7 +121,6 @@ const RegisterPage = () => {
       // Store token if needed (assuming token.token contains JWT)
       if (token.data) {
         localStorage.setItem('token', token.data);
-        console.log('JWT token stored');
         
         // Log in the user with the received token
         login(email, token.data);
@@ -141,11 +136,9 @@ const RegisterPage = () => {
       // Optional: Redirect to login or dashboard after 2 seconds
       setTimeout(() => {
         // window.location.href = '/login'; // or use react-router
-        console.log('Redirect to dashboard or login');
       }, 2000);
 
     } catch (error) {
-      console.error('Registration error:', error);
       setError('Network error. Please check your connection and try again.');
       setLoading(false);
     }

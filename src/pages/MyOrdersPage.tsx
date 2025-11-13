@@ -98,7 +98,6 @@ const MyOrdersPage = () => {
                 setOrders(transformedOrders);
                 setError(null);
             } catch (err) {
-                console.error('Error fetching orders:', err);
                 setError('Failed to load orders. Please try again later.');
             } finally {
                 setLoading(false);

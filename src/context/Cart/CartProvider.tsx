@@ -16,7 +16,6 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     const addItemToCart = async (productId: string) => {
         try {
             setError(''); // Clear previous errors
-            console.log('Adding item to cart', productId);
             
             if (!token) {
                 setError('Authentication required');
@@ -57,7 +56,6 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             setTotalAmount(cart.totalAmount);
 
         } catch (error) {
-            console.error('Error adding item to cart', error);
             setError('Network error occurred');
         }
     }
@@ -111,7 +109,6 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             setTotalAmount(cart.totalAmount);
 
         } catch (error) {
-            console.error('Error updating item quantity:', error);
             setError('Network error occurred');
         }
     }
@@ -153,7 +150,6 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             setTotalAmount(cart.totalAmount);
 
         } catch (error) {
-            console.error('Error removing item from cart', error);
             setError('Network error occurred');
         }
     }
@@ -184,7 +180,6 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             setTotalAmount(0);
 
         } catch (error) {
-            console.error('Error clearing cart', error);
             setError('Network error occurred');
         }
     }
@@ -221,7 +216,6 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             return { success: true, data: result };
 
         } catch (error) {
-            console.error('Error during checkout:', error);
             setError('Network error occurred');
             return { success: false, error: 'Network error occurred' };
         }
@@ -251,7 +245,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
                     setTotalAmount(cart.totalAmount);
                 }
             } catch (error) {
-                console.error('Error loading cart:', error);
+                // Error loading cart
             }
         };
         

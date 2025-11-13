@@ -211,7 +211,6 @@ const CheckoutPage = () => {
             }, 100);
 
         } catch (error) {
-            console.error('Error placing order:', error);
             setOrderError('Network error occurred. Please try again.');
             setIsProcessing(false);
         }

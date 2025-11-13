@@ -67,8 +67,6 @@ const LoginPage = () => {
         password,
       };
 
-      console.log('Attempting login for:', email);
-
       // Make API request
       const response = await fetch(`${BASE_URL}/user/login`, {
         method: 'POST',
@@ -77,7 +75,6 @@ const LoginPage = () => {
       });
 
       const result = await response.json();
-      console.log('Login response:', result);
 
       // Handle response
       if (!response.ok) {
@@ -102,8 +99,6 @@ const LoginPage = () => {
 
       // Store token and login user
       if (result.data) {
-        console.log('Login successful, storing token');
-        
         // Login through context (this will store in localStorage)
         login(email, result.data);
 
@@ -130,7 +125,6 @@ const LoginPage = () => {
       }
 
     } catch (error) {
-      console.error('Login error:', error);
       setError('Network error. Please check your connection and try again.');
       setLoading(false);
     }
