@@ -7,6 +7,7 @@ import AuthProvider from './context/Auth/AuthProvider';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderSuccessPage from './pages/OrderSuccessPage';
+import MyOrdersPage from './pages/MyOrdersPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import CartProvider from './context/Cart/CartProvider';
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/order-success" element={<OrderSuccessPage />} />
+            <Route path="/my-orders" element={<MyOrdersPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

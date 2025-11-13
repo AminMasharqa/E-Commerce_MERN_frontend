@@ -8,6 +8,7 @@ interface CartContextType {
     updateItemQuantity: (productId: string, quantity: number) => Promise<void>;
     removeFromCart: (productId: string) => Promise<void>;
     clearCart: () => Promise<void>;
+    checkout: (address: string) => Promise<{ success: boolean; error?: string; data?: any }>;
     error: string;
 }
 
@@ -18,6 +19,7 @@ const CartContext = createContext<CartContextType>({
     updateItemQuantity: async () => {},
     removeFromCart: async () => {},
     clearCart: async () => {},
+    checkout: async () => ({ success: false, error: 'Not implemented' }),
     error: '',
 })
 

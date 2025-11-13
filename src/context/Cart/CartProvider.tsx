@@ -188,6 +188,44 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
             setError('Network error occurred');
         }
     }
+
+    const checkout = async (address: string) => {
+        try {
+            setError(''); // Clear previous errors
+            
+            if (!token) {
+                setError('Authentication required');
+                return { success: false, error: 'Authentication required' };
+            }
+
+            const response = await fetch(`${BASE_URL}/cart/checkout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ address })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                setError(result.message || 'Failed to place order');
+                return { success: false, error: result.message || 'Failed to place order' };
+            }
+
+            // Clear cart after successful checkout
+            setCartItems([]);
+            setTotalAmount(0);
+
+            return { success: true, data: result };
+
+        } catch (error) {
+            console.error('Error during checkout:', error);
+            setError('Network error occurred');
+            return { success: false, error: 'Network error occurred' };
+        }
+    }
     // Load cart on component mount if user is authenticated
     useEffect(() => {
         const loadCart = async () => {
@@ -229,6 +267,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
                 updateItemQuantity, 
                 removeFromCart, 
                 clearCart,
+                checkout,
                 error 
             }}
         >

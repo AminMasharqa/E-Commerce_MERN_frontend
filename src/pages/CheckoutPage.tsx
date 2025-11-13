@@ -17,6 +17,8 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PaymentIcon from '@mui/icons-material/Payment';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/Cart/CartContext';
+import { useAuth } from '../context/Auth/AuthContext';
+import { BASE_URL } from '../constants/baseUrl';
 import {
     calculateSubtotal,
     calculateShipping,
@@ -45,6 +47,7 @@ interface PaymentInfo {
 
 const CheckoutPage = () => {
     const { cartItems, clearCart } = useCart();
+    const { token } = useAuth();
     const navigate = useNavigate();
 
     const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
@@ -68,6 +71,7 @@ const CheckoutPage = () => {
 
     const [errors, setErrors] = useState<Partial<ShippingInfo & PaymentInfo>>({});
     const [isProcessing, setIsProcessing] = useState(false);
+    const [orderError, setOrderError] = useState<string>('');
 
     const subtotal = calculateSubtotal(cartItems);
     const shipping = calculateShipping(subtotal);
@@ -159,17 +163,58 @@ const CheckoutPage = () => {
         }
 
         setIsProcessing(true);
+        setOrderError('');
 
-        // Simulate API call
-        setTimeout(() => {
+        try {
+            if (!token) {
+                setOrderError('Authentication required. Please log in.');
+                setIsProcessing(false);
+                return;
+            }
+
+            // Create the full address string from shipping info
+            const fullAddress = `${shippingInfo.address}, ${shippingInfo.city}, ${shippingInfo.state} ${shippingInfo.zipCode}, ${shippingInfo.country}`;
+
+            const response = await fetch(`${BASE_URL}/cart/checkout`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    address: fullAddress
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                setOrderError(result.message || 'Failed to place order');
+                setIsProcessing(false);
+                return;
+            }
+
+            // Order placed successfully
             setIsProcessing(false);
-            // Navigate first, then clear cart to avoid redirect conflict
-            navigate('/order-success');
-            // Clear cart after navigation
+            
+            // Navigate to success page
+            navigate('/order-success', { 
+                state: { 
+                    orderData: result.order,
+                    message: result.message 
+                } 
+            });
+
+            // Clear cart after successful order
             setTimeout(() => {
                 clearCart();
             }, 100);
-        }, 2000);
+
+        } catch (error) {
+            console.error('Error placing order:', error);
+            setOrderError('Network error occurred. Please try again.');
+            setIsProcessing(false);
+        }
     };
 
     if (cartItems.length === 0) {
@@ -224,6 +269,19 @@ const CheckoutPage = () => {
                         Back to Cart
                     </Button>
                 </Box>
+
+                {/* Error Alert */}
+                {orderError && (
+                    <Alert 
+                        severity="error" 
+                        sx={{ 
+                            mb: 4,
+                            borderRadius: '12px',
+                        }}
+                    >
+                        {orderError}
+                    </Alert>
+                )}
 
                 <Box
                     sx={{

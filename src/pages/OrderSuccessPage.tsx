@@ -2,11 +2,14 @@ import { Box, Container, Typography, Button, Paper } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HomeIcon from '@mui/icons-material/Home';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const OrderSuccessPage = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const orderData = location.state?.orderData;
+    const message = location.state?.message || 'Order placed successfully!';
 
     useEffect(() => {
         // Clear cart items from localStorage or handle cleanup if needed
@@ -96,6 +99,20 @@ const OrderSuccessPage = () => {
                     >
                         Thank you for your purchase! 🎉
                     </Typography>
+
+                    {orderData && (
+                        <Typography
+                            sx={{
+                                fontSize: '16px',
+                                color: '#6B7280',
+                                mb: 2,
+                                lineHeight: 1.6,
+                                fontWeight: 500,
+                            }}
+                        >
+                            Order ID: #{orderData._id?.slice(-8).toUpperCase() || 'N/A'}
+                        </Typography>
+                    )}
 
                     <Typography
                         sx={{

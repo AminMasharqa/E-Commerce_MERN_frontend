@@ -33,7 +33,7 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   },
 }));
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['My Orders', 'Profile', 'Account', 'Logout'];
 
 function Navbar() {
   const { username, token, logout } = useAuth();
@@ -56,15 +56,14 @@ function Navbar() {
     if (setting === 'Logout') {
       logout();
       navigate('/');
+    } else if (setting === 'My Orders') {
+      navigate('/my-orders');
     } else if (setting === 'Profile') {
       // Navigate to profile page when implemented
       console.log('Profile clicked');
     } else if (setting === 'Account') {
       // Navigate to account settings when implemented  
       console.log('Account clicked');
-    } else if (setting === 'Dashboard') {
-      // Navigate to dashboard when implemented
-      console.log('Dashboard clicked');
     }
   };
 
