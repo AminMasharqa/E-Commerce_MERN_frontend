@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -311,8 +312,8 @@ const RegisterPage = () => {
                   <Typography variant="body2" textAlign="center" color="text.secondary">
                     Already have an account?{' '}
                     <Typography
-                      component="a"
-                      href="/login"
+                      component={Link}
+                      to="/login"
                       sx={{ 
                         color: 'primary.main', 
                         textDecoration: 'none',
