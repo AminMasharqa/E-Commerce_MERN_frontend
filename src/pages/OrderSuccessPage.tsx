@@ -9,7 +9,7 @@ const OrderSuccessPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const orderData = location.state?.orderData;
-    const message = location.state?.message || 'Order placed successfully!';
+    // const message = location.state?.message || 'Order placed successfully!';
 
     useEffect(() => {
         // Clear cart items from localStorage or handle cleanup if needed
